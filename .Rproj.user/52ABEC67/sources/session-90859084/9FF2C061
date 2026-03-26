@@ -1,0 +1,28 @@
+{
+    "id": "9FF2C061",
+    "path": "~/GitHub/prob-stat/Lab01.qmd",
+    "project_path": "Lab01.qmd",
+    "type": "quarto_markdown",
+    "hash": "127402835",
+    "contents": "",
+    "dirty": false,
+    "created": 1773222897339.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "1011,0",
+        "scrollLine": "991",
+        "chunk_output_type": "console"
+    },
+    "folds": "44|20|46|0|\n63|16|159|0|\n160|16|276|2|\n279|12|373|0|\n374|11|438|0|\n441|4|465|0|\n466|4|487|0|\n488|4|505|0|\n506|4|524|0|\n529|56|531|0|\n545|11|588|0|\n589|37|615|0|\n618|4|632|0|\n633|4|639|0|\n640|4|652|0|\n653|4|682|0|\n729|4|736|0|\n737|40|746|0|\n747|34|751|18|\n752|18|760|18|\n761|25|773|0|\n774|48|788|0|\n789|43|800|19|\n801|43|834|0|\n",
+    "lastKnownWriteTime": 1774541259,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1774541259413,
+    "read_only": false,
+    "read_only_alternatives": []
+}
