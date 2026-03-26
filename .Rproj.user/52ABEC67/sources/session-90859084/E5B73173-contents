@@ -24,6 +24,7 @@ header-includes:
    - \AtBeginSubsection{}
    - \AtBeginDocument{\author[Ottavia M. Epifania]{Ottavia M. Epifania \\ University of Trento \\\texttt{ottavia.epifania@unitn.it}}}
    - \AtBeginDocument{\institute[]{A.A. 2025/2026} }
+   - \AtBeginDocument{\institute[]{A.A. 2025/2026} }
    - \AtBeginSection[]
           {
              \begin{frame}[plain]
@@ -538,7 +539,7 @@ knitr::include_graphics("img/work.png")
 
 - Calcola la media di `my_var` usando la funzione `mean()`, il minimo (`min()`) e massimo (`max()`)
 
-- Crea un oggetto (`voto`) di tipo character come segue: 
+- Crea un oggetto (`voto`) di tipo character come segue (usare la funzione `rep()`): 
   - "si" ripetuto 12 volte
   - "no" ripetuto 15 volte 
 
@@ -550,8 +551,11 @@ knitr::include_graphics("img/work.png")
 
      `matrix(data, nrow, ncol, byrow = FALSE)`
 
+\small
+
 ```{r}
-# crea una matrice con 3 righe e 4 colonne (i valori sono sistemati per riga)
+# crea una matrice con 3 righe e 4 colonne 
+# (i valori sono sistemati per riga)
 A = matrix(1:12, nrow=3, ncol = 4, byrow = TRUE)
 # assegna dei nomi alle righe 
 rownames(A) = paste("a", 
@@ -588,6 +592,8 @@ my.mat %>% kable(align = "c")
 
 
 ## Indicizzare le matrici: In pratica
+
+### 
 
 \small
 ```{r}
@@ -697,7 +703,7 @@ for (variable in vector) {
 
 `variable`: un indice che si muove attraverso `vector`
 
-`vector`: definisce il numero di ietrazioni
+`vector`: definisce il numero di iterazioni
 
 `computation`: operazioni che vengono svolte all'interno del ciclo `for`
 
@@ -917,7 +923,7 @@ sum(grepl("asso", results))/repliche
 
 ### 
 
-52 carte, ne vengono estratte due. Calcoalre la probabilità che entrambe siano fiori, considerando due scenari: 
+52 carte, ne vengono estratte due. Calcolare la probabilità che entrambe siano fiori, considerando due scenari: 
 
 * con reimmissione (eventi indipendenti)
 * senza reimmissione (eventi dipendenti)
@@ -988,7 +994,7 @@ sum(results2)/repliche
 
 Una moneta viene lanciata 10 volte, calcolare la probabilità di ottenere più croci che teste
 
-Numero dei casi possibili: Si ottengono con le disposizioni con ripetizione considerando gli $n = 2$ elementi ($\{T, C\}$) consdierando le $k = 10$ possibili sequenze di $\{T, C\}$: $D_{2, 10} = 2^10 = 1024$
+Numero dei casi possibili: Si ottengono con le disposizioni con ripetizione considerando gli $n = 2$ elementi ($\{T, C\}$) e le $k = 10$ possibili sequenze di $\{T, C\}$: $D_{2, 10} = 2^{10} = 1024$
 
 $A = \{\text{più croci che teste in 10 lanci}\}$ $\rightarrow$ 6 croci O 7 croci O 8 croci O 9 croci 0 10 croci:
 

@@ -24,6 +24,7 @@ header-includes:
    - \AtBeginSubsection{}
    - \AtBeginDocument{\author[Ottavia M. Epifania]{Ottavia M. Epifania \\ University of Trento \\\texttt{ottavia.epifania@unitn.it}}}
    - \AtBeginDocument{\institute[]{A.A. 2025/2026} }
+   - \AtBeginDocument{\institute[]{A.A. 2025/2026} }
    - \AtBeginSection[]
           {
              \begin{frame}[plain]
@@ -57,7 +58,7 @@ Si tratta di un linguaggio di programmazione object oriented completamente **ope
 
 Esiste una comunità mondiale che usa il software e che lavora costantemente per migliorarlo
 
-Fornisce conoscenze trasversali sui linguaggi di programmazione (aiuta ad entrare nelle loigiche di programmazione in maniera molto soft)
+Fornisce conoscenze trasversali sui linguaggi di programmazione (aiuta ad entrare nelle logiche di programmazione in maniera molto soft)
 
 
 
@@ -65,11 +66,11 @@ Fornisce conoscenze trasversali sui linguaggi di programmazione (aiuta ad entrar
 
 ### 
 
-È necessario installare `R` (disponibile [https://cran.r-project.org/bin/windows/base/](https://cran.r-project.org/bin/windows/base/))
+È necessario installare `R` (disponibile \color{blue}[https://cran.r-project.org/bin/windows/base/](https://cran.r-project.org/bin/windows/base/)\normalcolor)
  
 `RStudio` è l'IDE perfetto per `R`  $\rightarrow$ consente un utilizzo di `R` migliore e più semplice  
 
-`RStudio` si può installare dopo aver installato `R` (disponibile  [https://posit.co/download/rstudio-desktop/](https://posit.co/download/rstudio-desktop/))
+`RStudio` si può installare dopo aver installato `R` (disponibile  \color{blue}[https://posit.co/download/rstudio-desktop/](https://posit.co/download/rstudio-desktop/)\normalcolor)
 
 ### 
 
@@ -83,7 +84,7 @@ knitr::include_graphics("img/Rstudio.png")
 
 **Ambiente/Environment**. Contiene tutti gli oggetti che sono stati creati fino a quel momento nell'ambiente di lavoro
 
-**Script**. File di tipo testuale dove salvare il codice usato per generare gli opggetti presenti nell'ambiente. Si possono combinare codice e commenti (righe che non vengono eseguite e interpretate come codice `#`)
+**Script**. File di tipo testuale dove salvare il codice usato per generare gli oggetti presenti nell'ambiente. Si possono combinare codice e commenti (righe che non vengono eseguite e interpretate come codice `#`)
 
 ```{r}
 # codice per assegnare il numero 25 alla variabile x
@@ -130,7 +131,7 @@ Per fare lo switch allo script $\rightarrow$ `ctr + 1`
 #| echo: false
 #| out-width: 70%
 #| fig-align: center
-#| fig-cap: "creare una nuovo script"
+#| fig-cap: "creare un nuovo script"
 
 knitr::include_graphics("img/new-script.png")
 ```
@@ -270,7 +271,7 @@ knitr::include_graphics("img/work.png")
 
 - Aprire `RStudio` e creare un nuovo script 
 
-- Svolgere le sgeuenti operazioni. Il risultato di ogni operazione deve essere assegnato a un oggetto (scegliete voi i nomi): 
+- Svolgere le sgeuenti operazioni. Il risultato di ogni operazione deve essere assegnato a un oggetto: 
   - $10 + 15$ (nome dell'oggetto: `somma`)
   - $\frac{5}{10} \times 3 -2$ (nome dell'oggetto: `operazione_1`)
   - $(3*2) + \frac{5}{10} \times (45 * 0.5) - 15$ (nome dell'oggetto: `operazione_2`)
@@ -299,7 +300,7 @@ library(ggplot2) # permette di usare le funzioni al suo interno
 
 L'installazione da file locale presuppone che si abbia il file sorgente del pacchetto a disposizione. 
 
-I file sorgenti dei pacchetti hanno estensione  `tar.gz`. 
+I file sorgenti dei pacchetti hanno estensione  \color{blue}`tar.gz`\normalcolor. 
 
 Per installare il pacchetto `rmf` (necessario per il corso e scaricabile dal moodle del corso): 
 
@@ -327,7 +328,7 @@ library(rmf)
 
 ```{r}
 mean(1:5)
-mean(1.5, trim = 0.3)
+mean(1:5, trim = 0.3)
 ```
 
 ###
@@ -538,7 +539,7 @@ knitr::include_graphics("img/work.png")
 
 - Calcola la media di `my_var` usando la funzione `mean()`, il minimo (`min()`) e massimo (`max()`)
 
-- Crea un oggetto (`voto`) di tipo character come segue: 
+- Crea un oggetto (`voto`) di tipo character come segue (usare la funzione `rep()`): 
   - "si" ripetuto 12 volte
   - "no" ripetuto 15 volte 
 
@@ -550,8 +551,11 @@ knitr::include_graphics("img/work.png")
 
      `matrix(data, nrow, ncol, byrow = FALSE)`
 
+\small
+
 ```{r}
-# crea una matrice con 3 righe e 4 colonne (i valori sono sistemati per riga)
+# crea una matrice con 3 righe e 4 colonne 
+# (i valori sono sistemati per riga)
 A = matrix(1:12, nrow=3, ncol = 4, byrow = TRUE)
 # assegna dei nomi alle righe 
 rownames(A) = paste("a", 
@@ -588,6 +592,8 @@ my.mat %>% kable(align = "c")
 
 
 ## Indicizzare le matrici: In pratica
+
+### 
 
 \small
 ```{r}
@@ -697,7 +703,7 @@ for (variable in vector) {
 
 `variable`: un indice che si muove attraverso `vector`
 
-`vector`: definisce il numero di ietrazioni
+`vector`: definisce il numero di iterazioni
 
 `computation`: operazioni che vengono svolte all'interno del ciclo `for`
 
@@ -917,7 +923,7 @@ sum(grepl("asso", results))/repliche
 
 ### 
 
-52 carte, ne vengono estratte due. Calcoalre la probabilità che entrambe siano fiori, considerando due scenari: 
+52 carte, ne vengono estratte due. Calcolare la probabilità che entrambe siano fiori, considerando due scenari: 
 
 * con reimmissione (eventi indipendenti)
 * senza reimmissione (eventi dipendenti)
@@ -988,7 +994,7 @@ sum(results2)/repliche
 
 Una moneta viene lanciata 10 volte, calcolare la probabilità di ottenere più croci che teste
 
-Numero dei casi possibili: Si ottengono con le disposizioni con ripetizione considerando gli $n = 2$ elementi ($\{T, C\}$) consdierando le $k = 10$ possibili sequenze di $\{T, C\}$: $D_{2, 10} = 2^10 = 1024$
+Numero dei casi possibili: Si ottengono con le disposizioni con ripetizione considerando gli $n = 2$ elementi ($\{T, C\}$) e le $k = 10$ possibili sequenze di $\{T, C\}$: $D_{2, 10} = 2^{10} = 1024$
 
 $A = \{\text{più croci che teste in 10 lanci}\}$ $\rightarrow$ 6 croci O 7 croci O 8 croci O 9 croci 0 10 croci:
 
