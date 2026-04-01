@@ -1,0 +1,1010 @@
+---
+title: "Laboratorio 2"
+subititle: "Distribuzioni Discrete" 
+author: "Ottavia M. Epifania"
+format:
+  beamer:
+    slide-level: 3
+    theme: Montpellier
+    colortheme: dove
+    navigation: horizontal
+    highlight-style: tango
+    classoption: compress, aspectratio=149
+    innertheme: rounded
+    outertheme: miniframes
+callout-icon: false
+code-annotations: below
+header-includes: 
+   - \usepackage{graphicx} 
+   - \usepackage{xcolor}
+   - \usepackage{tikz}
+   - \usepackage{multirow}
+   - \newcommand{\cov}{\mathrm{Cov}}
+   - \usetikzlibrary{positioning,shapes,calc,arrows,decorations.pathreplacing}
+   - \AtBeginSubsection{}
+   - \AtBeginDocument{\author[Ottavia M. Epifania]{Ottavia M. Epifania \\ University of Trento \\\texttt{ottavia.epifania@unitn.it}}}
+   - \AtBeginDocument{\institute[]{A.A. 2025/2026} }
+   - \AtBeginSection[]
+          {
+             \begin{frame}[plain]
+             \tableofcontents[currentsection, hideallsubsections]
+              \end{frame}
+          }
+   - \AtBeginSubsection[]
+          {
+             \begin{frame}[plain]
+             \tableofcontents[currentsection,currentsubsection,hideothersubsections]
+             \end{frame}
+          }
+editor_options: 
+  chunk_output_type: console
+execute: 
+  echo: true 
+---
+
+```{r include=FALSE}
+myinclude = TRUE
+```
+
+# Binomiale
+
+### 
+
+Somma di $n$ variabile casuali (v.c.) Bernoulliane, indipendenti tra loro e con lo stesso parametro $p$ (probabilità di osservare un successo ad ogni singola prova). 
+
+$$P(X = x) = \binom{n}{x} p^x (1-p)^{n-x}$$
+
+dove 
+
+$$\binom{n}{x} = \frac{n!}{x!(n-x)!}$$
+\footnotesize
+
+$p$: probabilità di successo
+
+$1-p$: probabilità di insuccesso 
+
+$P(X = x)$: Probabilità di osservare $x$ successi
+
+$n$: numero di prove
+
+
+###
+
+$$\mu = n p$$
+
+$$\sigma^2 = n p (1-p)$$
+
+### {.plain}
+
+```{r}
+#| echo: false
+#| warning: false
+#| out-width: 75%
+#| label: fig-distBi
+#| fig-cap: "Distribuzione binomiale considerando $n = 10$"
+#| fig-subcap: 
+#|    - "$p = .50$"
+#|    - "$p = .20$"
+#|    - "$p = .70$"
+#| layout-ncol: 2
+#| layout-nrow: 2
+
+library(tidyverse)
+myd = data.frame(x = 0:10, 
+           p05 = dbinom(0:10, 10, prob = .50), 
+           p02 = dbinom(0:10, 10, prob = .20), 
+           p07 = dbinom(0:10, 10, prob = .70))
+           
+p1 = ggplot(myd, aes(x = factor(x), y = p05)) + 
+  geom_segment(aes(x = factor(x), xend = factor(x), y = 0, yend = p05),
+               color = "seagreen", 
+               linewidth = 1.2) +
+  geom_point(color = "seagreen", size = 3) +
+  labs(x = "x", y = "P(X = x)") +
+  theme_light() + 
+  scale_x_discrete(breaks = as.character(0:10)) + 
+  theme(axis.text = element_text(size = 20), 
+        axis.title = element_text(size = 22, face = "italic")) +ylim(0,.5)
+  
+
+p2 = ggplot(myd, aes(x = factor(x), y = p02)) + 
+  geom_segment(aes(x = factor(x), xend = factor(x), y = 0, yend = p02),
+               color = "darkorange", 
+               linewidth = 1.2) +
+  geom_point(color = "darkorange", size = 3) +
+  labs(x = "x", y = "P(X = x)") +
+  theme_light() + 
+  scale_x_discrete(breaks = as.character(0:10)) + 
+  theme(axis.text = element_text(size = 20), 
+        axis.title = element_text(size = 22, face = "italic"))+ylim(0,.5)
+
+
+p3 = ggplot(myd, aes(x = factor(x), y = p07)) + 
+  geom_segment(aes(x = factor(x), xend = factor(x), y = 0, yend = p07),
+               color = "royalblue4", 
+               linewidth = 1.2) +
+  geom_point(color = "royalblue4", size = 3) +
+  labs(x = "x", y = "P(X = x)") +
+  theme_light() + 
+  scale_x_discrete(breaks = as.character(0:10)) + 
+  theme(axis.text = element_text(size = 20), 
+        axis.title = element_text(size = 22, face = "italic"))+ylim(0,.5)
+
+p1;p2;p3
+
+```
+
+
+
+###
+
+```{r}
+#| echo: false
+#| label: fig-b105
+#| fig-cap: "$p = .50$"
+#| fig-subcap: 
+#|   - "Probabilità di massa"
+#|   - "Probabilità cumulata"
+#| layout-ncol: 2
+
+
+p1 
+
+myp = data.frame(x = 0:10, p05 = pbinom(0:10, 10, p = .50),
+                 p02 = pbinom(0:10, 10, p = .20), 
+                 p07 = pbinom(0:10, 10, p = .70))
+pp1 = ggplot(myp, aes(x = factor(x), y = p05)) + 
+  geom_segment(aes(x = factor(x), xend = factor(x), y = 0, yend = p05),
+               color = "seagreen", 
+               linewidth = 1.2) +
+  geom_point(color = "seagreen", size = 3) +
+  labs(x = "x", y = expression(P(X <= x))) +
+  theme_light() + 
+  scale_x_discrete(breaks = as.character(0:10)) + 
+  theme(axis.text = element_text(size = 20), 
+        axis.title = element_text(size = 22, face = "italic")) 
+pp1
+```
+
+
+
+###
+
+```{r}
+#| echo: false
+#| label: fig-b102
+#| fig-cap: "$p = .50$"
+#| fig-subcap: 
+#|   - "Probabilità di massa"
+#|   - "Probabilità cumulata"
+#| layout-ncol: 2
+
+
+p2 
+
+pp2 = ggplot(myp, aes(x = factor(x), y = p02)) + 
+  geom_segment(aes(x = factor(x), xend = factor(x), y = 0, yend = p02),
+               color = "darkorange", 
+               linewidth = 1.2) +
+  geom_point(color = "darkorange", size = 3) +
+  labs(x = "x", y = expression(P(X <= x))) +
+  theme_light() + 
+  scale_x_discrete(breaks = as.character(0:10)) + 
+  theme(axis.text = element_text(size = 20), 
+        axis.title = element_text(size = 22, face = "italic")) 
+pp2
+```
+
+
+###
+
+```{r}
+#| echo: false
+#| label: fig-b107
+#| fig-cap: "$p = .50$"
+#| fig-subcap: 
+#|   - "Probabilità di massa"
+#|   - "Probabilità cumulata"
+#| layout-ncol: 2
+
+p3
+
+pp3 = ggplot(myp, aes(x = factor(x), y = p07)) + 
+  geom_segment(aes(x = factor(x), xend = factor(x), y = 0, yend = p07),
+               color = "royalblue4", 
+               linewidth = 1.2) +
+  geom_point(color = "royalblue4", size = 3) +
+  labs(x = "x", y = expression(P(X <= x))) +
+  theme_light() + 
+  scale_x_discrete(breaks = as.character(0:10)) + 
+  theme(axis.text = element_text(size = 20), 
+        axis.title = element_text(size = 22, face = "italic")) 
+pp3
+
+```
+
+## Funzioni distribuzione binomiale 
+
+### 
+
+`dbinom(x, size, prob)`: Permette di ottenere la distribuzione di probabilità di massa dato $x$ (`x`), $n$ (`size`) e $p$ (`prob`)
+
+`pbinom(q, size, prob)`: Calcola la probabilità cumulate di osservare $P(X \leq x)$ massa dato $x$ (`q`), $n$ (`size`) e $p$ (`prob`)
+
+`pbinom(q, size, prob)`: Funzione inversa di `pbinom()` (permette di ritrovare il numero di $x$ data la probabilità cumuluta)
+
+`rbinom(n, size, prob)`: simula dei dati con probabilità binomiale
+
+
+## Esempio 
+
+### 
+
+10 Persone sono collegate a un sito di acquisti per acquistare un prodotto. La probabilità che ciascuno dei 10 soggetti acquisti effettivamente il prodotto (indipendentemente l'uno dall'altra) è pari a $.20$. Calcolare: 
+
+1. Probabilità che NESSUN soggetto acqusiti l'articolo 
+2. Probabilità che almento due soggetti acquistino l'articolo 
+3. Sia $X$ il numero di soggetti che acquistano l'articolo. Calcolare valore atteso e varianza di $X$
+
+\pause
+
+$n = 10$
+
+$p = 0.20$; $1- p = 0.80$
+
+### {.plain}
+
+\footnotesize
+
+```{r}
+#| fig-cap: Rappresentazione grafica della probabilità
+#| out-width: 70%
+#| fig-align: "center"
+x = 0:10 # supporto della variabile 
+dx = dbinom(x, 10, prob = 0.20) # probabilità 
+plot(x, dx, cex = 2, pch = 19)
+```
+
+### 
+
+\small 
+
+:::: {.columns}
+
+:::{.column width=70%}
+:::{.callout-note}
+## $P(X = 0)$
+
+$P(X = 0) = \binom{10}{0} 0.20^0 + 0.80^{10-0} = 0.1074$
+
+$P(X = 0) = \frac{10!}{0!(10!)} 0.20^0 + 0.80^{10-0} = 0.1074$
+
+```{r}
+dbinom(0, 10, prob = .20)
+```
+
+:::
+:::
+
+:::{.column width=30%}
+
+
+```{r}
+#| out-width: 90%
+#| fig-align: center
+#| echo: false
+cols = rep("black", length(x))
+cols[x == 0] = "firebrick" 
+plot(x, dx, pch = 19, cex = 2, col = cols)
+
+```
+
+
+:::
+
+
+::::
+
+
+### 
+
+:::: {.columns}
+
+:::{.column width=70%}
+:::{.callout-note}
+## $P(X >= 2)$
+
+$P(X>= 2) = P(X=2) + P(X = 3) + \ldots + P(X = 10)$
+
+$P(X >=2) = 1 - [P(X = 0) + P(X = 1)]$
+
+$P(X >= 2) = 1 - (0.1074 + 0.2684)$
+
+
+```{r}
+1 - (dbinom(0, 10, .20) + dbinom(1, 10, .20))
+```
+
+
+
+:::
+:::
+
+:::{.column width=30%}
+```{r}
+#| echo: false
+#| out-width: 90%
+#| fig-align: center
+
+cols = rep("black", length(x))
+cols[x >= 2] = "firebrick" 
+plot(x, dx, pch = 19, cex = 2, col = cols)
+```
+
+:::
+
+::::
+
+
+
+### 
+
+:::{.callout-note}
+
+## Valore atteso e varianza
+
+$\mu = n p = 10 * 0.20 = 2$
+
+$\sigma^2 = n p (1- p) = 10 * 0.20 * 0.80 = 1.60$
+
+:::
+
+### {.plain}
+
+\footnotesize
+
+```{r}
+#| out-width: 50%
+library(rmf)
+Binomiale(10, 0.20, grafico = FALSE, dettaglio = TRUE)
+```
+
+
+### 
+
+\footnotesize
+
+```{r}
+#| out-width: 50%
+#| echo: false 
+library(rmf)
+Binomiale(10, 0.20, grafico = TRUE, dettaglio = FALSE)
+
+```
+
+
+
+### 
+
+\footnotesize
+
+```{r}
+#| results: hide
+distBinom = Binomiale(10, 0.20, grafico = FALSE, dettaglio = TRUE)
+```
+
+
+```{r}
+str(distBinom)
+ex = sum(distBinom[,1] * distBinom[,2]); ex
+```
+
+
+## Esercizio tipo esame 1
+
+###
+
+Una moneta bilanciata (onesta) viene lanciata 3 volte. Si indichi con $X$ il
+numero di croci.
+
+1. Scrivere la distribuzione di probabilità della variabile casuale X
+indicando tutti i possibili valori di X e le probabilità
+corrispondenti.
+
+2. Verificare che la somma delle probabilità sia uguale a 1.
+
+3. Utilizzando le proprietà della distribuzione binomiale, indicare il
+valore atteso e la varianza di X.
+
+4. Calcolare il valore atteso di X utilizzando la distribuzione di
+probabilità trovata al punto a)
+
+### 
+
+$n = 3$ 
+
+$p = \frac{1}{2} = 0.50 = q$
+
+
+```{r}
+#| echo: false
+#| out-width: 60%
+#| fig-align: center
+x = 0:3
+dx = dbinom(x, 3, .5)
+plot(x, dx, cex = 2, pch = 19, ylim=c(0, 0.50))
+```
+
+
+### Soluzione analitica {.plain}
+
+\footnotesize
+
+```{r}
+#| echo: false
+#| results: asis
+
+  cat("
+Punto 1: 
+
+$P(X = 0) = \\binom{3}{0} = \\dfrac{1}{2}^0 \\dfrac{1}{2}^3 = \\dfrac{3!}{0!(3-0)!} 1 \\dfrac{1}{8} = \\dfrac{1}{8}$
+
+$P(X = 1) = \\binom{3}{1} = \\dfrac{1}{2}^1 \\dfrac{1}{2}^{3-1} = \\dfrac{3!}{1!(3-1)!} \\dfrac{1}{2} \\dfrac{1}{4} = \\dfrac{3}{8}$
+
+$P(X = 2) = \\binom{3}{2} = \\dfrac{1}{2}^2 \\dfrac{1}{2}^{3-2} = \\dfrac{3!}{2!(3-2)!} \\dfrac{1}{4} \\dfrac{1}{2} = \\dfrac{3}{8}$
+
+$P(X = 3) = \\binom{3}{3} = \\dfrac{1}{2}^3 \\dfrac{1}{2}^{3-3} = \\dfrac{3!}{3!(3-3)!} \\dfrac{1}{8} 1 = \\dfrac{1}{8}$
+
+Punto 2: 
+
+$\\dfrac{1}{8} + \\dfrac{3}{8} + \\dfrac{3}{8} + \\dfrac{1}{8} = 1$
+
+Punto 3: 
+
+$\\mu = n \\cdot p = 3 \\cdot 1/2 = 1.5$; 
+$\\sigma^2 = n \\cdot p \\cdot (1-p) = 3 \\cdot 1/2 \\cdot 1/2 = 0.75$
+")
+```
+
+
+
+
+### 
+
+
+```{r}
+#| echo: false
+#| results: asis
+
+if (myinclude) {
+  cat("
+Punto 4
+
+$\\mu = E(X) = \\sum x \\cdot p(x) = 0 \\cdot \\dfrac{1}{8} + 1 \\cdot \\dfrac{3}{8} + 2 \\cdot \\dfrac{3}{8} + 3 \\dfrac{1}{8}$
+")
+}
+
+```
+
+### Soluzione in `R` {.plain}
+
+\footnotesize 
+
+```{r, include = myinclude}
+x = 0:3
+dx = dbinom(x, 3, prob = .5) # la moneta è onesta
+
+risultati = cbind(x, dx, cumsum(dx))
+colnames(risultati) = c("x", "f(x)", "F(X)")
+risultati
+
+```
+
+```{r}
+#| echo: false
+#| results: asis
+
+if (myinclude) {
+  
+cat("
+la colonna f(x) riporta la probabilità di osservare il corrispetivo x successo \n
+la colonna F(X) riporta la probabilità cumulata, la somma deve essere 1 e si vede che è così dall'ultima riga
+    ")
+}
+```
+
+### {.plain}
+
+```{r include=myinclude}
+# calcolo valore attesso 
+3 * 1/2
+# calcolo varianza 
+3 * 1/2 * 1/2
+# calcolo valore atteso usando la distribuzione di 
+# probabilità 
+sum(risultati[,"x"] * risultati[, "f(x)"])
+```
+
+
+
+
+## Esercizio tipo esame 2
+
+### 
+
+Una variabile casuale discreta assume i valori $0,1,2,4$ rispettivamente con probabilità $\dfrac{1}{2}, \dfrac{1}{6}, \dfrac{1}{4}, \dfrac{1}{12}$.
+
+1. Trovare il valore atteso della variabile.  
+
+2. Trovare la varianza e la deviazione standard della variabile.
+
+\footnotesize
+
+```{r}
+#| echo: false
+#| results: asis
+
+  cat("
+$E(X) = 0  \\cdot \\dfrac{1}{2} + 1 \\cdot \\dfrac{1}{6} + 2 \\cdot \\dfrac{1}{4} + 4 \\cdot \\dfrac{1}{12} = 1$  
+  
+
+$E(X^2) = 0^2 * \\dfrac{1}{2} + 1^2 * \\dfrac{1}{6} + 2^2 * \\dfrac{1}{4} + 4^2 * \\dfrac{1}{12} = 2.5$
+
+
+$Var(X) = E(X^2) - E(X)^2 = 2.5 - 1 = 1.5$
+")
+```
+
+
+### Soluzione in R {.plain}
+
+\footnotesize
+
+```{r include=myinclude}
+# calcolo valore atteso 
+ex = 0 * 1/2 + 1 * 1/6 + 2 * 1/4 + 4 * 1/12; ex
+ex2 = 0^2 * 1/2 + 1^2 * 1/6 + 2^2 * 1/4 + 4^2 * 1/12 
+ex2 
+varx = ex2 - ex^2
+varx
+```
+
+
+## Esercizio tipo esame 3
+
+### 
+
+Test a risposta multipla, 4 domande con 3 opzioni di risposta (solo una è corretta). Se le risposte vengono date a caso, calcolare: 
+
+1. La probabilità di rispondendere esattamente a 0, 1, 2, 3, 4 domande
+2. Disegnare la distribuzione di probabilità del numero di risposte esatte
+3. Calcolare il valore atteso del numero di risposet corrette 
+
+Usare R e il pacchetto `rmf`
+
+### Soluzione con `rmf` {.plain}
+\footnotesize
+
+```{r}
+
+Binomiale(4, 1/3, grafico = FALSE)
+
+```
+
+### Soluzione con `R` base {.plain}
+
+\footnotesize
+
+```{r include=myinclude}
+#| out-width: 50%
+x = c(0,1,2,3,4)
+dx = dbinom(x, 4, prob = 1/3); dx
+ex = 4 * 1/3; ex
+plot(x, dx, pch = 19, cex = 2, ylim=c(0, 0.5))
+
+```
+
+
+# Poisson 
+
+### 
+
+La v.c. di Poisson è il conteggio del numero di eventi che avvaengono in un determinato lasso di tempo (e.g., numero di telefonate, numero di nuovi nati) o in uno spazio definito (numero di errori in una pagina web)
+
+Può assumuere i valori interi positivi, senza limite superiore $[0, + \infty)$
+
+
+### 
+
+La distribuzione di Poisson è definita dal parametro $mu$
+
+$$P(X = x) = \dfrac{e^{-\mu} \times \mu^x}{x!}$$
+$\mu$ è sia la media sia la varianza della distribuzione di Poisson e ne distribuisce interamente la forma
+
+Se $\mu$ è molto piccolo, sono più probabili i valori bassi dei conteggi 
+
+Viceversa, maggiore è $\mu$, più sono probabili i valori alti della distribuzione
+
+### {.plain}
+
+
+```{r}
+#| echo: false
+#| warning: false
+#| out-width: 75%
+#| label: fig-distP
+#| fig-cap: "Distribuzione di Poisson considerando $n = 10$"
+#| fig-subcap: 
+#|    - "$\\mu = .50$"
+#|    - "$\\mu = 1$"
+#|    - "$\\mu = 4$"
+#|    - "$\\mu = 7$"
+#| layout-ncol: 2
+#| layout-nrow: 2
+
+library(tidyverse)
+myd = data.frame(x = 0:10, 
+           p05 = dpois(0:10, 0.5), 
+           p02 = dpois(0:10, 1),
+           p07 = dpois(0:10, 5), 
+           p5 = dpois(0:10, 7))
+           
+p1 = ggplot(myd, aes(x = factor(x), y = p05)) + 
+  geom_segment(aes(x = factor(x), xend = factor(x), y = 0, yend = p05),
+               color = "seagreen", 
+               linewidth = 1.2) +
+  geom_point(color = "seagreen", size = 3) +
+  labs(x = "x", y = "P(X = x)") +
+  theme_light() + 
+  scale_x_discrete(breaks = as.character(0:10)) + 
+  theme(axis.text = element_text(size = 20), 
+        axis.title = element_text(size = 22, face = "italic"))  + ylim(0,.8)
+  
+
+p2 = ggplot(myd, aes(x = factor(x), y = p02)) + 
+  geom_segment(aes(x = factor(x), xend = factor(x), y = 0, yend = p02),
+               color = "darkorange", 
+               linewidth = 1.2) +
+  geom_point(color = "darkorange", size = 3) +
+  labs(x = "x", y = "P(X = x)") +
+  theme_light() + 
+  scale_x_discrete(breaks = as.character(0:10)) + 
+  theme(axis.text = element_text(size = 20), 
+        axis.title = element_text(size = 22, face = "italic"))  + ylim(0,.8)
+
+
+p3 = ggplot(myd, aes(x = factor(x), y = p07)) + 
+  geom_segment(aes(x = factor(x), xend = factor(x), y = 0, yend = p07),
+               color = "royalblue4", 
+               linewidth = 1.2) +
+  geom_point(color = "royalblue4", size = 3) +
+  labs(x = "x", y = "P(X = x)") +
+  theme_light() + 
+  scale_x_discrete(breaks = as.character(0:10)) + 
+  theme(axis.text = element_text(size = 20), 
+        axis.title = element_text(size = 22, face = "italic"))  + ylim(0,.8)
+
+
+p4 = ggplot(myd, aes(x = factor(x), y = p5)) + 
+  geom_segment(aes(x = factor(x), xend = factor(x), y = 0, yend = p5),
+               color = "deeppink4", 
+               linewidth = 1.2) +
+  geom_point(color = "deeppink4", size = 3) +
+  labs(x = "x", y = "P(X = x)") +
+  theme_light() + 
+  scale_x_discrete(breaks = as.character(0:10)) + 
+  theme(axis.text = element_text(size = 20), 
+        axis.title = element_text(size = 22, face = "italic")) + ylim(0,.8)
+
+p1;p2;p3;p4
+```
+
+
+
+
+
+###
+
+```{r}
+#| echo: false
+#| label: fig-PP05
+#| fig-cap: "$\\mu = .50$"
+#| fig-subcap: 
+#|   - "Probabilità di massa"
+#|   - "Probabilità cumulata"
+#| layout-ncol: 2
+
+
+p1 
+
+myp = data.frame(x = 0:10, p05 = ppois(0:10, .50),
+                 p02 = ppois(0:10, 1), 
+                 p07 = ppois(0:10, 4), 
+                 p5 = ppois(0:10, 7))
+pp1 = ggplot(myp, aes(x = factor(x), y = p05)) + 
+  geom_segment(aes(x = factor(x), xend = factor(x), y = 0, yend = p05),
+               color = "seagreen", 
+               linewidth = 1.2) +
+  geom_point(color = "seagreen", size = 3) +
+  labs(x = "x", y = expression(P(X <= x))) +
+  theme_light() + 
+  scale_x_discrete(breaks = as.character(0:10)) + 
+  theme(axis.text = element_text(size = 20), 
+        axis.title = element_text(size = 22, face = "italic")) 
+pp1
+```
+
+
+
+###
+
+```{r}
+#| echo: false
+#| label: fig-PP02
+#| fig-cap: "$\\mu = 1$"
+#| fig-subcap: 
+#|   - "Probabilità di massa"
+#|   - "Probabilità cumulata"
+#| layout-ncol: 2
+
+
+p2 
+
+pp2 = ggplot(myp, aes(x = factor(x), y = p02)) + 
+  geom_segment(aes(x = factor(x), xend = factor(x), y = 0, yend = p02),
+               color = "darkorange", 
+               linewidth = 1.2) +
+  geom_point(color = "darkorange", size = 3) +
+  labs(x = "x", y = expression(P(X <= x))) +
+  theme_light() + 
+  scale_x_discrete(breaks = as.character(0:10)) + 
+  theme(axis.text = element_text(size = 20), 
+        axis.title = element_text(size = 22, face = "italic")) 
+pp2
+```
+
+
+###
+
+```{r}
+#| echo: false
+#| label: fig-PP07
+#| fig-cap: "$\\mu = 4$"
+#| fig-subcap: 
+#|   - "Probabilità di massa"
+#|   - "Probabilità cumulata"
+#| layout-ncol: 2
+
+p3
+
+pp3 = ggplot(myp, aes(x = factor(x), y = p07)) + 
+  geom_segment(aes(x = factor(x), xend = factor(x), y = 0, yend = p07),
+               color = "royalblue4", 
+               linewidth = 1.2) +
+  geom_point(color = "royalblue4", size = 3) +
+  labs(x = "x", y = expression(P(X <= x))) +
+  theme_light() + 
+  scale_x_discrete(breaks = as.character(0:10)) + 
+  theme(axis.text = element_text(size = 20), 
+        axis.title = element_text(size = 22, face = "italic")) 
+pp3
+
+```
+
+
+###
+
+```{r}
+#| echo: false
+#| label: fig-PP5
+#| fig-cap: "$\\mu = 7$"
+#| fig-subcap: 
+#|   - "Probabilità di massa"
+#|   - "Probabilità cumulata"
+#| layout-ncol: 2
+
+p4
+
+pp4 = ggplot(myp, aes(x = factor(x), y = p5)) + 
+  geom_segment(aes(x = factor(x), xend = factor(x), y = 0, yend = p5),
+               color = "deeppink4", 
+               linewidth = 1.2) +
+  geom_point(color = "deeppink4", size = 3) +
+  labs(x = "x", y = expression(P(X <= x))) +
+  theme_light() + 
+  scale_x_discrete(breaks = as.character(0:10)) + 
+  theme(axis.text = element_text(size = 20), 
+        axis.title = element_text(size = 22, face = "italic")) 
+pp4
+
+```
+
+
+
+## Funzioni distribuzione binomiale 
+
+### 
+
+`dpois(x, lambda)`: Permette di ottenere la distribuzione di probabilità di massa dato $x$ (`x`) e $\mu$ (`lambda`)
+
+`ppois(q, lambda)`: Calcola la probabilità cumulate di osservare $P(X \leq x)$ massa dato $x$ (`q`) e $\mu$ (`lambda`)
+
+`qpois(p, lambda)`: Funzione inversa di `ppois()` (permette di ritrovare il numero di $x$ data la probabilità cumuluta)
+
+`rpois(n, lambda)`: simula dei dati secondo la Poisson
+
+
+
+## Esercizio tipo esame 
+
+### 
+
+Il numero $X$ di denunce a una compagnia di assicurazioni per danni subiti durante i traslochi è distributio secondo una distribuzione di Poisson con $\mu = 3.1$. 
+
+Qual è la probabilità di osservare: 
+
+1. meno di 3 denunce 
+2. esattamente 3 denunce 
+3. Tre o più denunce 
+4. Più di 3 denunce 
+
+### Soluzione analitica {.plain}
+
+\footnotesize
+
+$$P(X = x) = \dfrac{e^{-3.1}\times 3.1^x}{x!}$$
+Punto 1: 
+
+
+$P(X = 0) + P(X= 1) + P(X = 2) = \dfrac{e^{-3.1}\times 3.1^0}{0!} + \dfrac{e^{-3.1}\times 3.1^1}{1!} + \dfrac{e^{-3.1}\times 3.1^2}{2!} = 0.4012$
+
+Punto 2:  
+
+$P(X= 3) = \dfrac{e^{-3.1}\times 3.1^3}{3!} = 0.2237$
+
+Punto 3: 
+
+$P(X \geq 3) = 1 - [(PX = 0) + P(X = 1) + P(X = 2)] = 1- 0.4012 = 0.5988$
+
+Punto 4: 
+
+$P(X > 3) = 1 - [(PX = 0) + P(X = 1) + P(X = 2) + P(X = 3)]  = 0.3751$
+
+
+### Soluzione con `rmf` {.plain}
+
+\footnotesize
+
+```{r}
+library(rmf)
+Poisson(mu  = 3.1, grafico = FALSE)
+```
+
+### {.plain}
+
+\footnotesize
+
+
+```{r}
+#| out-width: 50%
+#| fig-align: center
+
+Poisson(mu  = 3.1, grafico = TRUE)
+```
+
+
+## Esercizio tipo esame 2
+
+### 
+
+Il numero medio di errori in una pagina di libero è $\mu = 0.24$. Supponendo che il numero di errori sia una variabile distribuita secondo una Poisson, calcolare la probabilità di osservare **al massimo**
+2 errori per ogni pagina in libro di 30 pagine
+
+\pause
+
+Soluzione analitica: 
+
+$\mu = 0.24$ su *una pagina* $\rightarrow$ $0.24 : 1 = x : 30$ $\rightarrow$ $\mu^* = 0.24 * 30 = 7.20$
+
+$P(X = x) = \dfrac{e^{-7.20}\times 7.20^x}{x!}$
+
+$P(X \leq 2) = P(X=0) + P(X = 1) + P(X=2) = 0.02547$
+
+### Soluzione con `R`
+
+\footnotesize
+
+```{r include=myinclude}
+#| eval: false
+x = 0:30
+dx = dpois(x, lambda = 7.2)
+plot(x, dx, pch = 19, cex = 2)
+sum(dx[x <= 2])
+```
+
+```{r}
+#| echo: false
+#| out-width: 50%
+#| fig-align: center
+x = 0:30
+dx = dpois(x, lambda = 7.2)
+cols = rep("black", length(x))
+cols[x <= 2] = "darkred"
+plot(x, dx, pch = 19, cex = 2, col = cols)
+```
+
+## Esercizio tipo esame 3
+
+### 
+
+I down di un sito seguono una distribuzione di Poisson con $\mu = 2$ *all'anno* (ovvero, ci si aspetta che mediamente ci siano due down all'anno)
+
+Calcolare: 
+
+1. La probabilità che in un anno non ci sia nessun down del sistema 
+2. La probabilità che in un anno ci siano 2 o più down
+3. La probabilità che in due anni scelti a caso, non ci siano interruzioni in nessuno dei due anni considerati  
+
+
+### Soluzione analitica {.plain}
+
+$P(X = x) = \dfrac{e^{-2}\times 2^x}{x!}$
+
+$P(X = 0) = \dfrac{e^{-2}\times 2^0}{0!} = 0.135$
+
+$P(X >= 2) = 1 - [P(X = 0) + P(X = 1)] = 1 - 0.406 = 0.594$
+
+Gli anni scelti a caso sono indipendenti: $0.135 \times 0.135 = 0.018225$
+
+### Soluzione con `rmf` {.plain}
+
+\footnotesize
+
+```{r}
+Poisson(mu=2, grafico = FALSE)
+```
+
+### Soluzione con R base {.plain}
+
+\footnotesize
+
+```{r include=myinclude}
+# Punto 1
+dpois(0, 2)
+# Punto 2 
+1 - (sum(dpois(c(0,1), 2)))
+# Punto 3 
+dpois(0, 2) * dpois(0, 2)
+```
+
+## Esercizio tipo esame 4
+
+### 
+
+I batteri sono distribuiti casualmente nelle acque di un fiume con una concentrazione di uno ogni 20cc di acqua. Considerando la distribuzione di Poisson, determinare: 
+
+1. La probabilità di trovare esattamente due batteri in 10cc
+2. La probabilità di trovare almeno un batterio in 1cc
+
+### Soluzione analictica {.plain}
+
+Punto 1: 
+
+
+$\mu = 1$ ogni 20cc $\rightarrow$ $1 : 20 = x : 10$ $\rightarrow$ $x = 10/20 = 0.50$
+
+$P(X = x) = \dfrac{e^{-0.50}\times 0.50^x}{x!} = \dfrac{e^{-0.50}\times 0.50^2}{2!} = 0.0758$
+
+Punto 2: 
+
+$\mu = 1$ ogni 20cc $\rightarrow$ $1 : 20 = x : 1$ $\rightarrow$ $x = 1/20 = 0.05$
+
+$P(X > 0) = 1 - \dfrac{e^{-0.05}\times 0.05^0}{0!} = 1-0.9512=0.0488$
+
+### Soluzione con R {.plain}
+
+```{r include=myinclude}
+dpois(2, 0.50)
+1-dpois(0, 0.05)
+```
+

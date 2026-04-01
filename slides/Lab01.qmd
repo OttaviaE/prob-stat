@@ -24,7 +24,6 @@ header-includes:
    - \AtBeginSubsection{}
    - \AtBeginDocument{\author[Ottavia M. Epifania]{Ottavia M. Epifania \\ University of Trento \\\texttt{ottavia.epifania@unitn.it}}}
    - \AtBeginDocument{\institute[]{A.A. 2025/2026} }
-   - \AtBeginDocument{\institute[]{A.A. 2025/2026} }
    - \AtBeginSection[]
           {
              \begin{frame}[plain]
@@ -44,7 +43,7 @@ execute:
 ---
 
 ```{r include=FALSE}
-myinclude = FALSE
+myinclude = TRUE
 ```
 
 
@@ -864,8 +863,7 @@ mazzo = paste0(mazzo, rep(1:13, each = 4))
 :::
 
 ### Soluzione
-
-\small 
+\footnotesize
 
 ```{r, include=myinclude}
 #| eval: false
@@ -904,6 +902,7 @@ mazzo = paste(mazzo, rep(c("asso", 2:13), each = 4), sep ="_")
 
 
 ### Soluzione 
+\footnotesize
 
 ```{r, include=myinclude}
 #| eval: false
@@ -960,6 +959,8 @@ MC?
 
 ### Soluzione (con reinserimento)
 
+\footnotesize
+
 ```{r include=myinclude}
 mazzo = rep(c("cuori", "denari", "fiori", "picche"), each = 13)
 repliche = 10000
@@ -975,6 +976,7 @@ sum(results1)/repliche
 
 ### Soluzione (senza reinserimento)
 
+\footnotesize
 
 ```{r include=myinclude}
 mazzo = rep(c("cuori", "denari", "fiori", "picche"), each = 13)
@@ -1003,6 +1005,8 @@ $$\binom{10}{6} + \binom{10}{7} + \binom{10}{8} + \binom{10}{9} + \binom{10}{10}
 $P(A) = \frac{386}{1024} =  0.3769531$
 
 ### Soluzione 
+
+\footnotesize
 
 ```{r include=myinclude}
 moneta = c("T", "C")
@@ -1070,7 +1074,7 @@ $$P(A) = \frac{|A|}{|\Omega|} = \frac{1}{4} = 0.25$$
 MC? (`set.seed(123)`)
 
 ### Soluzione 
-
+\footnotesize
 ```{r include=myinclude}
 set.seed(123)
 u1 = c("verde", "blu")
@@ -1109,6 +1113,8 @@ urna = c(rep("rossa", 4), rep("blu", 3))
 :::
 
 ### Soluzione 
+
+\footnotesize
 
 ```{r include=myinclude}
 repliche = 1000

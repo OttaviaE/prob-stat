@@ -1,0 +1,148 @@
+---
+title: "Laboratorio 3"
+subititle: "Distribuzioni Continue: Esponenziale e Uniforme" 
+author: "Ottavia M. Epifania"
+format:
+  beamer:
+    slide-level: 3
+    theme: Montpellier
+    colortheme: dove
+    navigation: horizontal
+    highlight-style: tango
+    classoption: compress, aspectratio=149
+    innertheme: rounded
+    outertheme: miniframes
+callout-icon: false
+code-annotations: below
+header-includes: 
+   - \usepackage{graphicx} 
+   - \usepackage{xcolor}
+   - \usepackage{tikz}
+   - \usepackage{multirow}
+   - \newcommand{\cov}{\mathrm{Cov}}
+   - \usetikzlibrary{positioning,shapes,calc,arrows,decorations.pathreplacing}
+   - \AtBeginSubsection{}
+   - \AtBeginDocument{\author[Ottavia M. Epifania]{Ottavia M. Epifania \\ University of Trento \\\texttt{ottavia.epifania@unitn.it}}}
+   - \AtBeginDocument{\institute[]{A.A. 2025/2026} }
+   - \AtBeginSection[]
+          {
+             \begin{frame}[plain]
+             \tableofcontents[currentsection, hideallsubsections]
+              \end{frame}
+          }
+   - \AtBeginSubsection[]
+          {
+             \begin{frame}[plain]
+             \tableofcontents[currentsection,currentsubsection,hideothersubsections]
+             \end{frame}
+          }
+editor_options: 
+  chunk_output_type: console
+execute: 
+  echo: true 
+---
+
+```{r include=FALSE}
+myinclude = TRUE
+```
+
+# Probabilità per distribuzioni continue
+
+### 
+
+
+:::{.callout-warning}
+## Attenzione!!
+
+Nelle v.c. **discrete**: $f(x) = P(X = x)$, ovvero la distribuzione di probabilità rappresenta effettivamente la probabilità che $X$ assuma il valore $x$
+
+Nelle v.c. continue: $f(x) \neq P(X=x)$, indica la **densità di probabilità** associata al valore $x$
+
+```{r}
+#| echo: false
+#| out-width: 70%
+#| fig-label: fig-dist
+#| fig-cap: "Distribuzioni di probabilità"
+#| fig-subcap:
+#|   - "Continua (Normale Standard)"
+#|   - "Binomiale con $n = 50$" 
+#| layout-ncol: 2
+x=seq(-2,2, length.out=50)
+dx = dnorm(x)
+y = 0:50
+db = dbinom(y, 50, prob = .50)
+plot(x, dx, type = "l", lwd = 2, ylab = "f(x)", cex.lab = 3)
+plot(y, db, xlab = "x", ylab = "f(x) = P(X=x)", cex.lab = 3)
+
+```
+
+:::
+
+## Funzione di ripartizione $F(x)$
+
+### 
+
+La probabilità che la $X$ assuma un valore **minore o uguale** a $y$
+
+$$F(x) \equiv \Pr(X \le x)$$
+
+Se X è continua:
+
+$$F(x) \equiv \Pr(X \le x) = \int_{-\infty}^{x} f(x)\,dx$$
+
+### 
+
+La probabilità che $X$ assuma un valore compreso tra $a$ e $b$ si ottiene cosniderando l'area sottesa alla curva
+
+$$P(a \le X \le b) = \int_{a}^{b} f(x)dx = F(b) - F(a)$$
+
+```{r}
+#| echo: false
+#| fig-cap: "Area sottesa alla curva compresa tra $a = -1$ e $b = 0.50$"
+#| out-width: 50%
+#| fig-align: center
+plot(x, dx, type = "l", lwd = 2, ylab = "f(x)", cex.lab = 3)
+polygon(c(-1, x[x>= -1 & x <= 0.5], 0.5), 
+        c(0, dx[x>= -1 & x <= 0.5], 0), col="deeppink2")
+
+```
+
+## Proprietà generali 
+
+### {.plain}
+
+$$f(x) \ge 0$$
+
+$$\int_{-\infty}^{+\infty} f(x)dx = 1$$
+
+```{r}
+#| echo: false
+#| out-width: 70%
+#| fig-align: center
+plot(x, dx, type = "l", lwd = 2, ylab = "f(x)", cex.lab = 3)
+polygon(c(-2, x[x>= -2 & x <= 2], 2), 
+        c(0, dx[x>= -2 & x <= 2], 0), col="gray54")
+text(-2, y = .10, expression(-infinity), cex = 4)
+text(2, y = .10, expression(+infinity), cex = 4)
+text(0, y = .25, 1, cex = 4)
+
+```
+
+
+### 
+
+$$E(X) = \mu \equiv \int_{-\infty}^{+\infty} x \cdot f(x)dx$$
+
+$$Var(X) = \sigma^2 \equiv \int_{-\infty}^{+\infty} (x - \mu)^2 \cdot f(x)dx$$
+
+$$E(X^2) \equiv \int_{-\infty}^{+\infty} x^2 \cdot f(x)dx$$
+# Distribuzione uniforme
+
+### 
+
+Una v.c. ha distribuzione uniforme nell'intervallo $[a, b]$ se la funzione di densità di probabilità di $X$ è data da 
+
+$$f_X(x; a, b) = \dfrac{1}{b-a}$$
+dove $-\infty < a < b < +\infty$. 
+
+Fuori da $[a, b]$: $f_X(x; a, b) = 0$ 
